@@ -17,11 +17,17 @@ Vagrant.configure(2) do |config|
   config.vm.box_url = "http://#{vagrant_cache_server}/vagrant/boxes/stackroute-barebones-node.box"
   config.vm.hostname = 'stackroute-node'
 
-  # Map the guest os port 8080 to host os port 8080
-  config.vm.network "forwarded_port", guest: 3000, host: 3040
+  # increse the memory to 1GB
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+  end
+  
+  
+  # Map the guest os port 3000 to host os port 3000, the default port of
+  # express.js is 3000
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
 
   if OS.windows?
-
     # enable symlinks between the host/gust filesystems
     config.vm.provider "virtualbox" do |vb|
       vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
